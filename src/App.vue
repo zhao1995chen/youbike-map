@@ -58,11 +58,19 @@ export default {
   },
   watch: { // 監聽事件發生並觸發之後事件
     youbikes() {
-      this.addMarkers();
+      this.updateMap();
     },
   },
   methods: {
-    addMarkers() {
+    updateMap() {
+      // remove markers
+      this.OSMap.eachLayer((layer) => {
+        if (layer instanceof L.Marker) {
+          this.OSMap.removeLayer(layer);
+        }
+      });
+
+      // add markers
       this.youbikes.forEach((bike) => {
         L.marker([bike.lat, bike.lng]).addTo(this.OSMap);
       });
