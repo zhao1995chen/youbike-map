@@ -48,15 +48,32 @@ export default {
       city: '台北市',
       district: '中正區',
     },
-    youbikes: [],
+    ubikes: [],
     OSMap: {},
   }),
+  computed: {
+    youbikes() {
+      return this.ubikes.filter((bike) => bike.sarea === this.select.district);
+    },
+  },
+  watch: { // 監聽事件發生並觸發之後事件
+    youbikes() {
+      this.addMarkers();
+    },
+  },
+  methods: {
+    addMarkers() {
+      this.youbikes.forEach((bike) => {
+        L.marker([bike.lat, bike.lng]).addTo(this.OSMap);
+      });
+    },
+  },
   created() {
     const api = 'https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.json';
     this.$http.get(api).then((response) => {
       // eslint-disable-next-line
       console.log(response.data);
-      this.youbikes = Object.keys(response.data.retVal).map((key) => response.data.retVal[key]);
+      this.ubikes = Object.keys(response.data.retVal).map((key) => response.data.retVal[key]);
     });
   },
   mounted() {
