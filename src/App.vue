@@ -74,6 +74,15 @@ export default {
       this.youbikes.forEach((bike) => {
         L.marker([bike.lat, bike.lng]).addTo(this.OSMap);
       });
+
+      // move new center
+      this.cityName[0].districts.find((district) => {
+        if (district.name === this.select.district) {
+          // this.OSMap.panTo(new L.LatLng(district.latitude, district.longitude)); // 直接移過去
+          this.OSMap.flyTo(new L.LatLng(district.latitude, district.longitude)); // 飛過去的感覺
+        }
+        return district.name === this.select.district;
+      });
     },
   },
   created() {
