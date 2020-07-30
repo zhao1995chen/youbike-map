@@ -47,7 +47,16 @@ export default {
       city: '台北市',
       district: '中正區',
     },
+    youbikes: [],
   }),
+  created() {
+    const api = 'https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.json';
+    this.$http.get(api).then((response) => {
+      // eslint-disable-next-line
+      console.log(response.data);
+      this.youbikes = Object.keys(response.data.retVal).map((key) => response.data.retVal[key]);
+    });
+  },
 };
 </script>
 
