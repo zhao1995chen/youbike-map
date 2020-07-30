@@ -1,28 +1,61 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="row no-gutters">
+      <!-- 選擇地區 -->
+      <div class="toolbox col-sm-3 p-2 bg-white">
+        <div class="form-group d-flex">
+          <label for="city" class="col-form-label mr-2 text-right">縣市</label>
+          <div class="flex-fill">
+            <select id="city" class="form-control" v-model="select.city">
+              <!-- 製作下拉選單 -->
+              <option v-bind:value="city.name" v-bind:key="city.name" v-for="city in cityName">
+                {{ city.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group d-flex">
+          <label for="dist" class="col-form-label mr-2 text-right">地區</label>
+          <div class="flex-fill">
+            <select id="dist" class="form-control" v-model="select.district">
+              <!-- 製作下拉選單 -->
+              <option :value="district.name" :key="district.name"
+                v-for="district in cityName.find((city) => city.name === select.city).districts">
+                {{ district.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 顯示地圖和 UBike 站點 -->
+      <div class="col-sm-9">
+        <div id="map"></div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
+import cityName from './assets/cityName.json';
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld,
-  },
+  data: () => ({
+    cityName,
+    select: {
+      city: '台北市',
+      district: '中正區',
+    },
+  }),
 };
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+@import 'bootstrap/scss/bootstrap';
+
+#map {
+  height: 100vh;
+  position: relative;
 }
 </style>
